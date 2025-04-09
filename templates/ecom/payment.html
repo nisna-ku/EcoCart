@@ -1,0 +1,31 @@
+{% extends 'ecom/customer_base.html' %}
+{% load static %}
+{% load custom_filters %}
+
+{% block content %}
+<div class="container mt-5 text-center">
+    <div class="card shadow-lg p-4">
+        <h2 class="mb-3">Complete Your Payment</h2>
+        <p class="lead">Order Amount: <strong>₹{{ total_amount|floatformat:2 }}</strong></p>
+
+        <form action="{% url 'payment-success' %}" method="POST">
+            {% csrf_token %}
+            <script 
+                src="https://checkout.razorpay.com/v1/checkout.js"
+                data-key="{{ razorpay_key }}"
+                data-amount="{{ total_amount|multiply:100 }}"
+                data-currency="INR"
+                data-order_id="{{ razorpay_order_id }}"
+                data-buttontext="Pay Securely"
+                data-name="EcoCart"
+                data-description="Complete your purchase with confidence"
+                data-theme.color="#28a745">
+            </script>
+        </form>
+
+        <div class="alert alert-info mt-3" role="alert">
+            <strong>Secure Payment:</strong> Your transaction is encrypted and secure.
+        </div>
+    </div>
+</div>
+{% endblock content %}

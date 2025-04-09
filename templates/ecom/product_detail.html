@@ -1,0 +1,295 @@
+{% extends 'ecom/customer_base.html' %}
+{% load static %}
+
+{% block content %}
+
+
+<style>
+    :root {
+        --primary-color: #3498db;
+        --secondary-color: #2ecc71;
+        --text-dark: #2c3e50;
+        --background-light: #f4f6f8;
+    }
+
+    body {
+        background-color: var(--background-light);
+        font-family: 'Inter', sans-serif;
+    }
+
+    .product-page-container {
+        max-width: 1200px;
+        margin: 2rem auto;
+        padding: 0 15px;
+    }
+
+    .product-detail-wrapper {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 2rem;
+        background: white;
+        border-radius: 16px;
+        box-shadow: 0 10px 40px rgba(0,0,0,0.1);
+        overflow: hidden;
+        transition: all 0.3s ease;
+    }
+
+    @media (max-width: 992px) {
+        .product-detail-wrapper {
+            grid-template-columns: 1fr;
+        }
+    }
+
+    .product-image-section {
+        position: relative;
+        background-color: var(--background-light);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 2rem;
+    }
+
+    .product-image {
+        max-width: 100%;
+        max-height: 500px;
+        object-fit: contain;
+        border-radius: 12px;
+        transition: transform 0.3s ease;
+    }
+
+    .product-image:hover {
+        transform: scale(1.05);
+    }
+
+    .product-info-section {
+        padding: 2rem;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+    }
+
+    .product-title {
+        color: var(--text-dark);
+        font-size: 2.5rem;
+        margin-bottom: 1rem;
+        font-weight: 700;
+    }
+
+    .product-price {
+        color: var(--primary-color);
+        font-size: 2rem;
+        margin-bottom: 1rem;
+        font-weight: 600;
+    }
+
+    .product-meta {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 1rem;
+        margin-bottom: 1.5rem;
+        background-color: var(--background-light);
+        padding: 1rem;
+        border-radius: 10px;
+    }
+
+    .product-meta-item {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+    }
+
+    .product-meta-item i {
+        color: var(--primary-color);
+        font-size: 1.2rem;
+    }
+
+    .product-description {
+        color: #6c757d;
+        margin-bottom: 1.5rem;
+        line-height: 1.6;
+    }
+
+    .product-actions {
+        display: flex;
+        gap: 1rem;
+    }
+
+    .btn-custom {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.5rem;
+        padding: 0.75rem 1.5rem;
+        border-radius: 8px;
+        transition: all 0.3s ease;
+    }
+
+    .btn-add-to-cart {
+        background-color: var(--primary-color);
+        color: white;
+    }
+
+    .btn-add-to-cart:hover {
+        background-color: #2980b9;
+        transform: translateY(-3px);
+    }
+
+    .feedback-section {
+        margin-top: 2rem;
+        background-color: var(--background-light);
+        padding: 1.5rem;
+        border-radius: 12px;
+    }
+
+    .feedback-item {
+        background: white;
+        padding: 1rem;
+        border-radius: 8px;
+        margin-bottom: 1rem;
+        box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+    }
+
+    .rating-badge {
+        background-color: var(--secondary-color);
+        color: white;
+        padding: 0.25rem 0.5rem;
+        border-radius: 4px;
+        font-size: 0.8rem;
+    }
+
+    .sustainability-section {
+        background-color: #e8f4f8;
+        padding: 1rem;
+        border-radius: 10px;
+        margin-top: 1rem;
+    }
+
+    .delivery-info {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        color: var(--secondary-color);
+        margin-top: 1rem;
+    }
+</style>
+
+
+
+<div class="product-page-container">
+    <div class="product-detail-wrapper">
+        <!-- Product Image Section -->
+        <div class="product-image-section">
+            <img 
+                src="{{ product.product_image.url }}" 
+                alt="{{ product.name }}" 
+                class="product-image"
+            >
+        </div>
+
+        <!-- Product Information Section -->
+        <div class="product-info-section">
+            <h1 class="product-title">{{ product.name }}</h1>
+            <div class="product-price">₹{{ product.price }}</div>
+
+            {%if product.stock_quantity > 0%}
+            
+
+            <div class="product-meta">
+                <div class="product-meta-item">
+                    <i class="fas fa-box"></i>
+                    <span>In Stock</span>
+                </div>
+                <div class="product-meta-item">
+                    <i class="fas fa-tags"></i>
+                    <span>Category: {{ product.category }}</span>
+                </div>
+            </div>
+            {%else%}
+            <div class="product-meta">
+                <div class="product-meta-item">
+                    <i class="fas fa-box"></i>
+                    <span>Out Stock</span>
+                </div>
+                <div class="product-meta-item">
+                    <i class="fas fa-tags"></i>
+                    <span>Category: {{ product.category }}</span>
+                </div>
+            </div>
+            {%endif%}
+
+
+            <p class="product-description">
+                {{ product.description }}
+            </p>
+
+            <div class="sustainability-section">
+                <h4>Sustainability Details</h4>
+                <p>
+                    <strong>Carbon Footprint:</strong> 
+                    {{ product.carbon_footprint }} kg CO₂
+                </p>
+                <p>
+                    <strong>sustainability score :</strong> 
+                    {{ product.sustainability_score }} kg
+                </p>
+                <p>
+                    <strong>Production Method:</strong> 
+                    {{ product.production_method }}
+                </p>
+            </div>
+
+            <div class="delivery-info">
+                <i class="fas fa-truck"></i>
+                <span>
+                    Expected Delivery: 
+                    {{ expected_delivery_date|date:"D, M d" }}
+                </span>
+            </div>
+
+            <div class="product-actions mt-3">
+                <a href="{% url 'add-to-cart' product.id %}" class="btn btn-custom btn-add-to-cart">
+                    <i class="fas fa-shopping-cart"></i> Add to Cart
+                </a>
+                <a href="{% url 'add-feedback' product.id %}" class="btn btn-custom btn-outline-primary">
+                    <i class="fas fa-comment"></i> Write a Review
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Feedback Section -->
+    <div class="feedback-section mt-4">
+        <h3>Customer Reviews</h3>
+        {% if feedbacks %}
+            {% for feedback in feedbacks %}
+                <div class="feedback-item">
+                    <div class="d-flex justify-content-between align-items-center mb-2">
+                        <strong>{{ feedback.name.username }}</strong>
+                        <span class="rating-badge">
+                            {{ feedback.rating }}/5
+                        </span>
+                    </div>
+                    <p>{{ feedback.feedback }}</p>
+                </div>
+            {% endfor %}
+        {% else %}
+            <p class="text-muted">No reviews yet. Be the first to review!</p>
+        {% endif %}
+    </div>
+</div>
+{% endblock content %}
+
+{% block extra_js %}
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Optional interactive elements
+        const productImage = document.querySelector('.product-image');
+        productImage.addEventListener('mousemove', function(e) {
+            const rect = productImage.getBoundingClientRect();
+            const x = e.clientX - rect.left;
+            const y = e.clientY - rect.top;
+            
+            productImage.style.transformOrigin = `${x}px ${y}px`;
+        });
+    });
+</script>
+{% endblock %}

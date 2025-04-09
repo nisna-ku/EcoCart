@@ -1,0 +1,76 @@
+{% extends 'ecom/admin_base.html' %}
+{% load static %}
+{% block content %}
+
+
+<head>
+  <link href="//netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
+  <script src="//netdna.bootstrapcdn.com/bootstrap/3.0.0/js/bootstrap.min.js"></script>
+  <script src="//code.jquery.com/jquery-1.11.1.min.js"></script>
+
+  <style media="screen">
+    a:link {
+      text-decoration: none;
+    }
+
+    h6 {
+      text-align: center;
+    }
+
+    .row {
+      margin: 100px;
+    }
+  </style>
+</head>
+
+<div class="container">
+  <div class="panel panel-danger">
+    <div class="panel-heading">
+      <h6 class="panel-title">Total Merchants</h6>
+    </div>
+    <table class="table table-hover table-bordered" id="dev-table">
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>User</th>
+          <th>Business logo</th>
+          <th>Contact</th>
+          <th>Description</th>
+          <th>Status</th>
+          <th>Created</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      {% for b in business_users %}
+      <tr>
+        <td>{{ b.business_name }}</td>
+        <td>{{ b.user }}</td>
+        <td><img src="{% static b.business_logo.url %}" alt="Business Logo" height="40px" width="40px"></td>
+        <td>{{ b.website }}</td>
+        <td>{{ b.description }}</td>
+        <td>
+            {% if b.verification_status == "Verified" %}
+                <span class="text-success">{{ b.verification_status }}</span>  <!-- Green -->
+            {% elif b.verification_status == "Pending" %}
+                <span class="text-warning">{{ b.verification_status }}</span>  <!-- Orange -->
+            {% elif b.verification_status == "Rejected" %}
+                <span class="text-danger">{{ b.verification_status }}</span>  <!-- Red -->
+            {% else %}
+                <span class="text-secondary">{{ b.verification_status }}</span>  <!-- Gray for unknown values -->
+            {% endif %}
+        </td>
+        <td>{{ b.created_at }}</td>
+        <td>
+            <a class="btn btn-primary btn-xs" href="#"><span class="glyphicon glyphicon-edit"></span></a>
+            <a class="btn btn-danger btn-xs" href="#"><span class="glyphicon glyphicon-trash"></span></a>
+        </td>
+    </tr>
+    
+      {% endfor %}
+    </table>
+  </div>
+</div>
+<!--
+developed By : sumit kumar
+-->
+{% endblock content %}

@@ -1,0 +1,171 @@
+{% extends 'ecom/business_base.html' %}
+{% load static %}
+
+{% block content %}
+
+
+<style>
+    body {
+        background-color: #757d89;
+    }
+
+    .product-form-container {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        min-height: 100vh;
+        padding: 2rem 0;
+    }
+
+    .product-form-card {
+        width: 100%;
+        max-width: 800px;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        border: none;
+        border-radius: 12px;
+        background-color: rgb(236, 231, 231);
+        padding: 2.5rem;
+    }
+
+    .product-form-card h1 {
+        color: #2c3e50;
+        margin-bottom: 1.5rem;
+        font-weight: 600;
+    }
+
+    .form-group label {
+        font-weight: 500;
+        color: #34495e;
+        margin-bottom: 0.5rem;
+    }
+
+    .form-control {
+        border-color: #bdc3c7;
+        padding: 0.75rem;
+        transition: border-color 0.3s ease;
+    }
+
+    .form-control:focus {
+        border-color: #3498db;
+        box-shadow: 0 0 0 0.2rem rgba(52, 152, 219, 0.25);
+    }
+
+    .btn-cancel {
+        background-color: #e74c3c;
+        color: white;
+        transition: background-color 0.3s ease;
+    }
+
+    .btn-cancel:hover {
+        background-color: #c0392b;
+    }
+
+    .btn-save {
+        background-color: #2ecc71;
+        color: white;
+        transition: background-color 0.3s ease;
+    }
+
+    .btn-save:hover {
+        background-color: #27ae60;
+    }
+
+    .success-message {
+        position: fixed;
+        top: 20px;
+        left: 50%;
+        transform: translateX(-50%);
+        z-index: 1000;
+        width: 300px;
+        animation: fadeInOut 3s ease-in-out;
+    }
+
+    @keyframes fadeInOut {
+        0%, 100% { opacity: 0; }
+        10%, 90% { opacity: 1; }
+    }
+</style>
+
+
+<div class="container product-form-container">
+    <div class="card product-form-card">
+        <h1 class="text-center">Add New Product</h1>
+        
+        <form id="productForm" method="post" enctype="multipart/form-data">
+            {% csrf_token %}
+            
+            {% for field in form %}
+            <div class="form-group mb-3">
+                {{ field.label_tag }}
+                {{ field }}
+                {% if field.errors %}
+                    <div class="text-danger small mt-1">
+                        {{ field.errors }}
+                    </div>
+                {% endif %}
+            </div>
+            {% endfor %}
+            
+            <div class="d-flex justify-content-between mt-4">
+                <button type="button" class="btn btn-cancel" onclick="resetForm()">
+                    <i class="fas fa-times-circle me-2"></i>Cancel
+                </button>
+                <button type="submit" class="btn btn-save">
+                    <i class="fas fa-save me-2"></i>Save Product
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<!-- Success Message -->
+<div id="successMessage" class="success-message text-center" style="display: none;">
+    <div class="alert alert-success alert-dismissible fade show" role="alert">
+        Product successfully added!
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+</div>
+
+<script>
+    document.getElementById('productForm').addEventListener('submit', function(e) {
+        e.preventDefault();
+        
+        // Perform form validation here if needed
+        
+        // Submit form via AJAX or traditional method
+        fetch(this.action, {
+            method: 'POST',
+            body: new FormData(this),
+            headers: {
+                'X-CSRFToken': '{{ csrf_token }}'
+            }
+        })
+        .then(response => {
+            if (response.ok) {
+                showSuccessMessage();
+                this.reset();
+            } else {
+                // Handle errors
+                console.error('Form submission failed');
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+        });
+    });
+
+    function showSuccessMessage() {
+        const successMessage = document.getElementById('successMessage');
+        successMessage.style.display = 'block';
+        
+        // Automatically hide after 3 seconds
+        setTimeout(() => {
+            successMessage.style.display = 'none';
+        }, 3000);
+    }
+
+    function resetForm() {
+        document.getElementById('productForm').reset();
+    }
+</script>
+{% endblock content%}

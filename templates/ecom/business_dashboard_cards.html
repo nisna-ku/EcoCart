@@ -1,0 +1,147 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Business Dashboard</title>
+    
+    <!-- Bootstrap 5 CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    
+    <!-- Font Awesome 6 -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" rel="stylesheet">
+    
+    <style>
+        :root {
+            --primary-red: #DC3545;
+            --primary-green: #546257;
+            --primary-gray: #6C757D;
+            --dark-overlay: #3C3C3C;
+        }
+
+        body {
+            background-color: #f4f6f9;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Arial, sans-serif;
+        }
+
+        .dashboard-card {
+            border: none;
+            border-radius: 12px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
+            overflow: hidden;
+        }
+
+        .dashboard-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+        }
+
+        .dashboard-card-icon {
+            position: absolute;
+            top: -20px;
+            right: -20px;
+            opacity: 0.7;
+            font-size: 5rem;
+            color: rgba(255, 255, 255, 0.2);
+        }
+
+        .dashboard-card-content {
+            position: relative;
+            z-index: 10;
+            color: white;
+            padding: 1.5rem;
+        }
+
+        .dashboard-card-number {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+        }
+
+        .dashboard-card-label {
+            font-size: 1rem;
+            opacity: 0.9;
+        }
+
+        .clr-block-1 {
+            background: linear-gradient(135deg, var(--primary-red), #767071);
+        }
+
+        .clr-block-2 {
+            background: linear-gradient(135deg, var(--primary-green), #2AB24A);
+        }
+
+        .clr-block-3 {
+            background: linear-gradient(135deg, var(--primary-gray), #7A858F);
+        }
+
+        .icon-container {
+            background-color: white;
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: absolute;
+            top: 50%;
+            right: 20px;
+            transform: translateY(-50%);
+        }
+
+        .icon-container i {
+            color: #343A40;
+            font-size: 2.5rem;
+        }
+    </style>
+</head>
+<body>
+    <div class="container mt-5">
+        <div class="row g-4">
+            <div class="col-md-4">
+                <div class="dashboard-card clr-block-2 position-relative">
+                    <div class="dashboard-card-content">
+                        <div class="dashboard-card-number">{{ customercount }}</div>
+                        <div class="dashboard-card-label">Registered Customers</div>
+                        <i class="fas fa-users dashboard-card-icon"></i>
+                    </div>
+                    <div class="icon-container">
+                        <i class="fas fa-users"></i>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-4">
+                <div class="dashboard-card clr-block-2 position-relative">
+                    <div class="dashboard-card-content">
+                        <div class="dashboard-card-number">{{ productcount }}</div>
+                        <div class="dashboard-card-label">Total Products</div>
+                        <i class="fas fa-shopping-cart dashboard-card-icon"></i>
+                    </div>
+                    <div class="icon-container">
+                        <i class="fas fa-shopping-cart"></i>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-4">
+                <div class="dashboard-card clr-block-2 position-relative">
+                    <div class="dashboard-card-content">
+                        <div class="dashboard-card-number">{{ ordercount }}</div>
+                        <div class="dashboard-card-label">Total Orders</div>
+                        <i class="fas fa-chart-bar dashboard-card-icon"></i>
+                    </div>
+                    <div class="icon-container">
+                        <i class="fas fa-chart-bar"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bootstrap 5 JS Bundle with Popper -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

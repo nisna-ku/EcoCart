@@ -1,0 +1,233 @@
+{% extends 'ecom/customer_base.html' %}
+{% load static %}
+
+{% block content %}
+<style>
+  :root {
+    --primary-color: #3498db;
+    --secondary-color: #2ecc71;
+    --background-color: #f4f6f9;
+    --text-color: #2c3e50;
+    --card-background: #ffffff;
+    --border-color: #e9ecef;
+  }
+
+  body {
+    background-color: var(--background-color);
+    font-family: 'Inter', sans-serif;
+    color: var(--text-color);
+  }
+
+  .order-container {
+    max-width: 900px;
+    margin: 50px auto;
+    padding: 0 15px;
+  }
+
+  .section-title {
+    color: var(--primary-color);
+    margin-bottom: 30px;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+  }
+
+  .section-title i {
+    margin-right: 15px;
+    font-size: 1.5rem;
+  }
+
+  .order-card {
+    background-color: var(--card-background);
+    border-radius: 15px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+    margin-bottom: 25px;
+    transition: all 0.3s ease;
+    border: 1px solid var(--border-color);
+  }
+
+  .order-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 15px 40px rgba(0,0,0,0.1);
+  }
+
+  .order-card-body {
+    padding: 25px;
+  }
+
+  .order-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+    border-bottom: 1px solid var(--border-color);
+    padding-bottom: 15px;
+  }
+
+  .order-id {
+    font-weight: 600;
+    color: var(--primary-color);
+  }
+
+  .order-status {
+    padding: 5px 15px;
+    border-radius: 20px;
+    font-size: 0.9rem;
+    font-weight: 500;
+  }
+
+  .status-pending {
+    background-color: #f39c12;
+    color: white;
+  }
+
+  .status-completed {
+    background-color: var(--secondary-color);
+    color: white;
+  }
+
+  .status-processing {
+    background-color: #3498db;
+    color: white;
+  }
+
+  .order-details {
+    display: flex;
+    justify-content: space-between;
+  }
+
+  .order-items {
+    flex: 1;
+    margin-right: 30px;
+  }
+
+  .order-summary {
+    flex: 1;
+  }
+
+  .order-items-list {
+    list-style-type: none;
+    padding: 0;
+  }
+
+  .order-items-list li {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 10px;
+    padding: 10px;
+    background-color: var(--background-color);
+    border-radius: 8px;
+  }
+
+  .order-progress {
+    margin-top: 20px;
+  }
+
+  .progress {
+    height: 30px;
+    border-radius: 15px;
+    overflow: hidden;
+  }
+
+  .progress-bar {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 600;
+  }
+
+  .no-orders {
+    text-align: center;
+    padding: 50px;
+    background-color: var(--card-background);
+    border-radius: 15px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+  }
+
+  @media (max-width: 768px) {
+    .order-details {
+      flex-direction: column;
+    }
+
+    .order-items {
+      margin-right: 0;
+      margin-bottom: 20px;
+    }
+  }
+</style>
+
+<div class="order-container">
+  <h2 class="section-title">
+    <i class="fas fa-shopping-bag"></i>
+    My Orders
+  </h2>
+  
+  {% if orders %}
+    {% for order in orders %}
+      <div class="order-card">
+          <div class="order-card-body">
+            <div class="order-header">
+              <span class="order-id">Order #{{ order.id }}</span>
+              <span class="order-status 
+                {% if order.status == 'Pending' %}status-pending
+                {% elif order.status == 'Completed' %}status-completed
+                {% else %}status-processing
+                {% endif %}">
+                {{ order.status }}
+              </span>
+            </div>
+
+            <div class="order-details">
+              <div class="order-items">
+                <h6>Order Items</h6>
+                <ul class="order-items-list">
+                  {% for item in order.orderitem_set.all %}
+                    <li>
+                      <span>{{ item.product.name }}</span>
+                      <span>{{ item.quantity }} x ₹{{ item.product.price }}</span>
+                    </li>  <button><a href="{% url 'order-details' order.id %}" style="text-decoration: none; color: inherit;">View Details
+                    </a></button>
+                    <button>
+                        <a href="{% url 'add-feedback' item.product.id %}" style="text-decoration: none; color: inherit;">
+                            Rate Product
+                        </a>
+                    </button>
+                  {% endfor %}
+                </ul>
+              </div>
+
+              <div class="order-summary">
+                <h6>Order Summary</h6>
+                <p><strong>Total Amount:</strong> ₹{{ order.total_amount }}</p>
+                <div class="order-progress">
+                  <div class="progress">
+                    <div class="progress-bar bg-success" 
+                         role="progressbar" 
+                         style="width: {{ order.progress }}%;"
+                         aria-valuenow="{{ order.progress }}" 
+                         aria-valuemin="0" 
+                         aria-valuemax="100">
+                      {{ order.status }}
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        
+        
+
+      </div>
+    {% endfor %}
+  {% else %}
+    <div class="no-orders">
+      <i class="fas fa-box-open" style="font-size: 4rem; color: var(--primary-color); margin-bottom: 20px;"></i>
+      <h4>No Orders Found</h4>
+      <p>You haven't placed any orders yet. Start shopping!</p>
+    </div>
+  {% endif %}
+</div>
+
+<!-- Font Awesome for icons -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+{% endblock content %}

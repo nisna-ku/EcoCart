@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Professional E-Commerce Platform</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js" defer></script>
+</head>
+
+<body class="antialiased bg-gray-100">
+    <!-- Header -->
+    <header class="bg-white shadow-md sticky top-0 z-30">
+        <div class="container mx-auto px-4 py-3 flex justify-between items-center">
+            <!-- Logo -->
+            <div class="flex items-center">
+                <a href="/" class="text-2xl font-bold text-green-600 tracking-tight"><i class="fa-solid fa-leaf logo-icon"></i>&nbsp; EcoCart</a>
+            </div>
+            
+            <!-- Navigation -->
+            <nav class="hidden md:flex space-x-6 items-center">
+                <div class="relative">
+                    <a href="{%url 'customerlogin'%}" class="text-gray-700 hover:text-blue-600 cursor-pointer">Login & Sign Up</a>
+                    <ul class="absolute bg-white shadow-md rounded mt-2 hidden">
+                        <li><a href="/customerlogin" class="block px-4 py-2 hover:bg-gray-200">Login</a></li>
+                        <li><a href="/customersignup" class="block px-4 py-2 hover:bg-gray-200">Sign Up</a></li>
+                    </ul>
+                </div>
+                <a href="/adminclick" class="text-gray-700 hover:text-blue-600">Admin</a>
+                <a href="/businessclick" class="text-gray-700 hover:text-blue-600">Business</a>
+            </nav>
+            
+            <!-- Search & Cart -->
+            <div class="flex items-center space-x-4">
+                <form action="/search" method="get" class="relative hidden md:block">
+                    <input 
+                        type="search" 
+                        placeholder="Search for Products, Brands and more" 
+                        name="query" 
+                        class="pl-10 pr-4 py-2 border border-gray-300 rounded-full focus:ring-2 focus:ring-blue-500 focus:outline-none"
+                    >
+                    <i class="fas fa-search absolute left-3 top-3 text-gray-400"></i>
+                </form>
+                <a href="/cart" class="relative text-gray-700 hover:text-blue-600 text-xl">
+                    <i class="fas fa-shopping-cart"></i>
+                    
+                </a>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="container mx-auto px-4 py-8">
+        <!-- Image Carousel -->
+        <div x-data="imageCarousel()" class="relative w-full max-w-4xl mx-auto overflow-hidden rounded-lg shadow-lg">
+            <div 
+                x-ref="carousel"
+                class="flex transition-transform duration-700 ease-in-out"
+                :style="`transform: translateX(-${currentSlide * 100}%)`"
+            >
+                <template x-for="(image, index) in images" :key="index">
+                    <div class="w-full flex-shrink-0">
+                        <img 
+                            :src="image"
+                            class="w-full h-72 md:h-96 object-cover rounded-lg"
+                            alt="Carousel Image"
+                        >
+                    </div>
+                </template>
+            </div>
+
+            <!-- Pagination Dots -->
+            <div class="absolute bottom-4 left-1/2 transform -translate-x-1/2 flex space-x-2">
+                <template x-for="(image, index) in images" :key="index">
+                    <button
+                        @click="currentSlide = index"
+                        :class="currentSlide === index ? 'bg-blue-500' : 'bg-gray-400'"
+                        class="w-3 h-3 rounded-full transition-all duration-300"
+                    ></button>
+                </template>
+            </div>
+        </div>
+
+        <script>
+        function imageCarousel() {
+            return {
+                currentSlide: 0,
+                images: [
+                    "https://lifesight.io/wp-content/uploads/62e3888add6d204e844bff40-64367c2139b2cc1378c8ee92-Ecommerce-20-Product-20-Photography-20-Cover-20-Image-412d1ee313-1.webp",
+                    "https://carmellamarketing.com/wp-content/uploads/2023/05/Screen-Shot-2023-05-09-at-9.50.02-AM-1024x650.png",
+                    "https://voyado.com/wp-content/uploads/2022/08/beauty-ecommerce-products.jpg",
+                    "https://friendlyturtle.com/cdn/shop/articles/eco-friendly-products.jpg?v=1691526889",
+                    "https://meyers.com/wp-content/uploads/2022/02/shutterstock_1750773434.webp",
+                    "https://consumerenergyalliance.org/cms/wp-content/uploads/elementor/thumbs/household-eco-friendly-products-r2fs2l4p9q2qz681gjac3gytlcgdk2a4z2mk7oj3ek.jpg",
+                ],
+                init() {
+                    this.startAutoSlide();
+                },
+                startAutoSlide() {
+                    setInterval(() => {
+                        this.currentSlide = (this.currentSlide + 1) % this.images.length;
+                    }, 4000);
+                }
+            }
+        }
+        </script>
+
+        {% block content %}
+        {% endblock %}
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-gray-900 text-white py-12">
+        <div class="container mx-auto px-4 grid md:grid-cols-4 gap-8">
+            <div>
+                <h3 class="text-xl font-bold mb-4">EcoCart</h3>
+                <p class="text-gray-400">Your trusted platform for seamless online shopping experiences.</p>
+            </div>
+            <div>
+                <h4 class="text-lg font-semibold mb-4">Quick Links</h4>
+                <ul class="space-y-2">
+                    <li><a href="#" class="text-gray-400 hover:text-white">Home</a></li>
+                    <li><a href="#" class="text-gray-400 hover:text-white">Products</a></li>
+                    <li><a href="#" class="text-gray-400 hover:text-white">Categories</a></li>
+                    <li><a href="#" class="text-gray-400 hover:text-white">Contact</a></li>
+                </ul>
+            </div>
+            <div>
+                <h4 class="text-lg font-semibold mb-4">Customer Support</h4>
+                <ul class="space-y-2">
+                    <li><a href="#" class="text-gray-400 hover:text-white">FAQs</a></li>
+                    <li><a href="#" class="text-gray-400 hover:text-white">Returns</a></li>
+                    <li><a href="#" class="text-gray-400 hover:text-white">Shipping</a></li>
+                    <li><a href="#" class="text-gray-400 hover:text-white">Help Center</a></li>
+                </ul>
+            </div>
+            <div>
+                <h4 class="text-lg font-semibold mb-4">Connect With Us</h4>
+                <div class="flex space-x-4">
+                    <a href="#" class="text-2xl text-blue-600 hover:text-blue-500"><i class="fab fa-facebook"></i></a>
+                    <a href="#" class="text-2xl text-green-500 hover:text-green-400"><i class="fab fa-whatsapp"></i></a>
+                    <a href="#" class="text-2xl text-pink-600 hover:text-pink-500"><i class="fab fa-instagram"></i></a>
+                    <a href="#" class="text-2xl text-blue-400 hover:text-blue-300"><i class="fab fa-twitter"></i></a>
+                </div>
+            </div>
+        </div>
+        <div class="text-center mt-8 text-gray-500 border-t border-gray-800 pt-6">
+            © 2024 Simple Ecommerce. All Rights Reserved.
+        </div>
+    </footer>
+</body>
+</html>

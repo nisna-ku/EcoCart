@@ -1,0 +1,55 @@
+{% extends 'ecom/customer_base.html' %}
+{% load static %}
+
+{% block content %}
+<style>
+    .progress {
+        display: flex;
+        background-color: #e0e0e0;
+        border-radius: 10px;
+        overflow: hidden;
+    }
+
+    .progress-bar {
+        padding: 10px;
+        text-align: center;
+        font-weight: bold;
+        transition: width 0.5s ease-in-out;
+    }
+
+    .bg-success {
+        background-color: #28a745 !important;
+    }
+
+    .bg-light {
+        background-color: #f8f9fa !important;
+    }
+</style>
+
+<div class="container mt-5">
+    <h2>Order Details</h2>
+    <p><strong>Order ID:</strong> {{ order.id }}</p>
+    <p><strong>Status:</strong> {{ order.status }}</p>
+    <p><strong>Total Amount:</strong> ₹{{ order.total_amount }}</p>
+
+    <h4>Items:</h4>
+    <ul>
+        {% for item in order_items %}
+        <li>{{ item.product.name }} - {{ item.quantity }} x ₹{{ item.product.price }}</li>
+        {% endfor %}
+    </ul>
+    <p><strong>Progress Debug:</strong> {{ progress_percentage }}%</p>
+
+
+    <!-- Order Tracking Progress Bar -->
+    <h4>Order Tracking</h4>
+    <div class="progress" style="height: 25px;">
+        <div class="progress-bar bg-success" 
+             role="progressbar" 
+             style="width: {{ progress_percentage }}%;">
+            {{ order.status }} ({{ progress_percentage }}%)
+        </div>
+    </div>
+    
+</div>
+{% endblock %}

@@ -1,0 +1,45 @@
+{% extends 'ecom/business_base.html' %}
+{% load static %}
+
+{% block content %}
+<div class="container" style="display: flex; justify-content: center;margin-top: 300px ;align-items: center; height: 100vh; ">
+    <div class="card" style="width: 800px; padding: 20px;">
+        <h1 class="text-center mb-4">Update Product</h1>
+        
+        <form id="productForm" method="post" enctype="multipart/form-data">
+            {% csrf_token %}
+            {{form.as_p}}
+          
+
+            <!-- Submit and Cancel Buttons -->
+            <div class="d-flex justify-content-between">
+                <button type="button" class="btn btn-secondary" onclick="resetForm()">Cancel</button>
+                <button type="submit" class="btn btn-primary">Save</button>
+            </div>
+        </form>
+
+        <!-- Success Message -->
+        <div id="successMessage" class="success-message text-center mt-3" style="display: none;">
+            <div class="alert alert-success" role="alert">
+                Product has been successfully added!
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    // Example to show success message after form submit (this can be customized based on your requirements)
+    document.getElementById('productForm').onsubmit = function () {
+        setTimeout(function() {
+            document.getElementById('successMessage').style.display = 'block';
+        }, 1000);
+    };
+
+    // Reset form function
+    function resetForm() {
+        document.getElementById('productForm').reset();
+        document.getElementById('successMessage').style.display = 'none';
+    }
+</script>
+
+{% endblock %}

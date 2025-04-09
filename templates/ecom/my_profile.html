@@ -1,0 +1,151 @@
+{% extends 'ecom/customer_base.html' %}
+{% load static %}
+{% block content %}
+
+<style>
+  :root {
+    --primary-color: #3498db;
+    --secondary-color: #2ecc71;
+    --background-color: #f4f6f9;
+    --text-color: #2c3e50;
+    --card-background: #ffffff;
+  }
+
+  body {
+    background-color: var(--background-color);
+    font-family: 'Inter', sans-serif;
+    color: var(--text-color);
+  }
+
+  .profile-container {
+    max-width: 800px;
+    margin: 50px auto;
+    background-color: var(--card-background);
+    border-radius: 15px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.08);
+    padding: 40px;
+    display: flex;
+    align-items: center;
+    gap: 40px;
+  }
+
+  .profile-avatar {
+    flex: 0 0 250px;
+    text-align: center;
+  }
+
+  .profile-avatar img {
+    width: 250px;
+    height: 250px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 5px solid var(--primary-color);
+    transition: transform 0.3s ease;
+  }
+
+  .profile-avatar img:hover {
+    transform: scale(1.05);
+  }
+
+  .profile-details {
+    flex: 1;
+  }
+
+  .profile-details h2 {
+    color: var(--primary-color);
+    margin-bottom: 20px;
+    font-weight: 700;
+  }
+
+  .profile-info {
+    background-color: var(--background-color);
+    border-radius: 10px;
+    padding: 20px;
+    margin-bottom: 20px;
+  }
+
+  .profile-info p {
+    margin: 10px 0;
+    display: flex;
+    align-items: center;
+    gap: 15px;
+  }
+
+  .profile-info i {
+    color: var(--secondary-color);
+    font-size: 1.2rem;
+  }
+
+  .edit-profile-btn {
+    display: inline-block;
+    background-color: var(--primary-color);
+    color: white;
+    padding: 12px 30px;
+    border-radius: 30px;
+    text-decoration: none;
+    font-weight: 600;
+    transition: all 0.3s ease;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+  }
+
+  .edit-profile-btn:hover {
+    background-color: var(--secondary-color);
+    transform: translateY(-3px);
+    box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+  }
+
+  .edit-profile-container {
+    text-align: center;
+    margin-top: 30px;
+  }
+
+  @media (max-width: 768px) {
+    .profile-container {
+      flex-direction: column;
+      text-align: center;
+      padding: 20px;
+    }
+
+    .profile-details {
+      width: 100%;
+    }
+  }
+</style>
+
+<div class="container">
+  <div class="profile-container">
+    <div class="profile-avatar">
+      <img src="{% static customer.profile_pic.url %}" alt="Profile Picture" />
+    </div>
+    
+    <div class="profile-details">
+      <h2>Profile Information</h2>
+      <div class="profile-info">
+        <p>
+          <i class="fas fa-user"></i>
+          <strong>Username:</strong> {{ request.user }}
+        </p>
+        <p>
+          <i class="fas fa-map-marker-alt"></i>
+          <strong>Address:</strong> {{ customer.address }}
+        </p>
+        <p>
+          <i class="fas fa-phone"></i>
+          <strong>Contact:</strong> {{ customer.mobile }}
+        </p>
+      </div>
+      
+      <div class="edit-profile-container">
+        <a href="/edit-profile" class="edit-profile-btn">
+          Edit Profile
+        </a>
+      </div>
+    </div>
+  </div>
+</div>
+
+{% endblock content %}
+
+<!-- Note: This template assumes you have Font Awesome for icons -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">

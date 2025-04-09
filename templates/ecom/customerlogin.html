@@ -1,0 +1,435 @@
+<!-- <!DOCTYPE html>
+{% load widget_tweaks %}
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="utf-8">
+    <title>Customer Login</title>
+    <style media="screen">
+      body {
+        margin: 0;
+        padding: 0;
+        font-family: sans-serif;
+        background-color: #f4f4f4;
+      }
+
+      .login-container {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        min-height: 100vh;
+        padding: 20px;
+      }
+
+      .box {
+        width: 100%;
+        max-width: 400px;
+        padding: 40px;
+        background: #3E454C;
+        text-align: center;
+        border-radius: 10px;
+        box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+      }
+
+      .box input[type="text"], .box input[type="password"] {
+        border: 0;
+        background: none;
+        display: block;
+        margin: 20px auto;
+        text-align: center;
+        border: 2px solid #ffffff;
+        padding: 10px 10px;
+        width: 100%;
+        outline: none;
+        color: white;
+        border-radius: 24px;
+        transition: 0.25s;
+      }
+
+      .box h1 {
+        color: white;
+        font-weight: 500;
+        margin-bottom: 30px;
+      }
+
+      .box input[type="text"]:focus, .box input[type="password"]:focus {
+        width: 100%;
+        border-color: #d3d3d3;
+      }
+
+      .box input[type="submit"] {
+        border: 0;
+        background: none;
+        display: block;
+        margin: 20px auto;
+        text-align: center;
+        border: 2px solid #2ecc71;
+        padding: 14px 40px;
+        outline: none;
+        color: white;
+        border-radius: 24px;
+        transition: 0.25s;
+        cursor: pointer;
+      }
+
+      .box input[type="submit"]:hover {
+        background: #2ecc71;
+      }
+
+      .signup-link {
+        color: #fff;
+        text-decoration: none;
+        margin-top: 15px;
+        display: block;
+        transition: color 0.3s ease;
+      }
+
+      .signup-link:hover {
+        color: #2ecc71;
+        text-decoration: underline;
+      }
+    </style>
+  </head>
+  <body>
+    {% include "ecom/navbar.html" %}
+    
+    <div class="login-container">
+      <div class="card">
+        <form class="box" method="post">
+          {% csrf_token %}
+          <h1>Customer Login</h1>
+          
+          {% render_field form.username class="form-control" placeholder="Username" autocomplete="off" %}
+          {% render_field form.password class="form-control" placeholder="Password" %}
+          
+          <input type="submit" value="Login">
+          
+          <a href="{% url 'customersignup' %}" class="signup-link">
+            Don't have an account? Sign Up
+          </a>
+        </form>
+      </div>
+    </div>
+
+    {% include "ecom/footer.html" %}
+  </body></html> 
+  -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>EcoCart - Login</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Poppins', sans-serif;
+    }
+    
+    body {
+      background-color: #f4f4f4;
+      min-height: 100vh;
+    }
+    
+    .container {
+      display: flex;
+      min-height: 100vh;
+      overflow: hidden;
+      position: relative;
+    }
+    
+    .bg-image {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.4)), url('/api/placeholder/1920/1080') no-repeat center center;
+      background-size: cover;
+      z-index: -1;
+      animation: zoomEffect 30s infinite alternate;
+    }
+    
+    @keyframes zoomEffect {
+      0% {
+        transform: scale(1);
+      }
+      100% {
+        transform: scale(1.1);
+      }
+    }
+    
+    .login-container {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      width: 100%;
+      padding: 20px;
+    }
+    
+    .login-box {
+      width: 100%;
+      max-width: 430px;
+      background: rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(10px);
+      border-radius: 20px;
+      padding: 40px;
+      box-shadow: 0 15px 35px rgba(0, 0, 0, 0.2);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      text-align: center;
+      overflow: hidden;
+      position: relative;
+    }
+    
+    .login-box::before {
+      content: '';
+      position: absolute;
+      top: -50%;
+      left: -50%;
+      width: 380px;
+      height: 420px;
+      background: linear-gradient(0deg, transparent, rgba(46, 204, 113, 0.2), rgba(46, 204, 113, 0.2));
+      transform-origin: bottom right;
+      animation: animate 6s linear infinite;
+    }
+    
+    .login-box::after {
+      content: '';
+      position: absolute;
+      top: -50%;
+      left: -50%;
+      width: 380px;
+      height: 420px;
+      background: linear-gradient(0deg, transparent, rgba(46, 204, 113, 0.2), rgba(46, 204, 113, 0.2));
+      transform-origin: bottom right;
+      animation: animate 6s linear infinite;
+      animation-delay: -3s;
+    }
+    
+    @keyframes animate {
+      0% {
+        transform: rotate(0deg);
+      }
+      100% {
+        transform: rotate(360deg);
+      }
+    }
+    
+    .form-inner {
+      position: relative;
+      z-index: 10;
+    }
+    
+    .logo {
+      margin-bottom: 20px;
+    }
+    
+    .logo-text {
+      font-size: 28px;
+      font-weight: 700;
+      color: #fff;
+      letter-spacing: 1.5px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    
+    .logo-text span {
+      color: #2ecc71;
+    }
+    
+    .logo-icon {
+      font-size: 24px;
+      margin-right: 8px;
+      color: #2ecc71;
+    }
+    
+    .login-box h1 {
+      color: #ffffff;
+      font-weight: 500;
+      font-size: 24px;
+      margin-bottom: 30px;
+      letter-spacing: 1px;
+    }
+    
+    .input-group {
+      position: relative;
+      margin-bottom: 30px;
+    }
+    
+    .input-group input {
+      width: 100%;
+      padding: 15px 20px;
+      background: rgba(255, 255, 255, 0.1);
+      border: none;
+      outline: none;
+      border-radius: 30px;
+      color: #fff;
+      font-size: 16px;
+      letter-spacing: 1px;
+      transition: all 0.3s ease;
+      border: 1px solid rgba(255, 255, 255, 0.2);
+    }
+    
+    .input-group input::placeholder {
+      color: rgba(255, 255, 255, 0.7);
+    }
+    
+    .input-group input:focus {
+      border-color: #2ecc71;
+      box-shadow: 0 0 15px rgba(46, 204, 113, 0.3);
+    }
+    
+    .input-group i {
+      position: absolute;
+      right: 20px;
+      top: 50%;
+      transform: translateY(-50%);
+      color: rgba(255, 255, 255, 0.7);
+    }
+    
+    .remember-forgot {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 20px;
+    }
+    
+    .remember-me {
+      display: flex;
+      align-items: center;
+    }
+    
+    .remember-me input {
+      margin-right: 5px;
+      accent-color: #2ecc71;
+    }
+    
+    .remember-me label, .forgot-password {
+      color: rgba(255, 255, 255, 0.8);
+      font-size: 14px;
+    }
+    
+    .forgot-password {
+      text-decoration: none;
+      transition: color 0.3s ease;
+    }
+    
+    .forgot-password:hover {
+      color: #2ecc71;
+      text-decoration: underline;
+    }
+    
+    .btn {
+      width: 100%;
+      padding: 15px;
+      background: rgba(46, 204, 113, 0.8);
+      border: none;
+      border-radius: 30px;
+      color: #fff;
+      font-size: 16px;
+      font-weight: 500;
+      letter-spacing: 1px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      margin-top: 10px;
+    }
+    
+    .btn:hover {
+      background: #2ecc71;
+      box-shadow: 0 5px 20px rgba(46, 204, 113, 0.4);
+      transform: translateY(-2px);
+    }
+    
+    .signup-link {
+      margin-top: 25px;
+      color: rgba(255, 255, 255, 0.8);
+      font-size: 14px;
+    }
+    
+    .signup-link a {
+      color: #fff;
+      text-decoration: none;
+      font-weight: 600;
+      transition: color 0.3s ease;
+    }
+    
+    .signup-link a:hover {
+      color: #2ecc71;
+      text-decoration: underline;
+    }
+    
+    /* Eco-friendly icons */
+    .eco-icons {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      top: 0;
+      left: 0;
+      overflow: hidden;
+      pointer-events: none;
+    }
+    
+    .eco-icon {
+      position: absolute;
+      opacity: 0.3;
+      color: #2ecc71;
+    }
+    
+    /* Responsive styling */
+    @media (max-width: 768px) {
+      .login-box {
+        padding: 30px;
+        max-width: 350px;
+      }
+    }
+  </style>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/all.min.css">
+</head>
+<body>
+  <div class="container">
+    <div class="bg-image"></div>
+    <div class="login-container">
+      <div class="login-box">
+        <div class="form-inner">
+          <div class="logo">
+            <h1 class="logo-text"><i class="fa-solid fa-leaf logo-icon"></i>Eco<span>Cart</span></h1>
+          </div>
+          <h1>Welcome Back</h1>
+          <form method="post">
+            {% csrf_token %}
+            <div class="input-group">
+              <input type="text" name="username" placeholder="Username" required>
+              <i class="fa-solid fa-user"></i>
+            </div>
+            <div class="input-group">
+              <input type="password" name="password" placeholder="Password" required>
+              <i class="fa-solid fa-lock"></i>
+            </div>
+            <div class="remember-forgot">
+              <div class="remember-me">
+                <input type="checkbox" id="remember" name="remember">
+                <label for="remember">Remember me</label>
+              </div>
+              <a href="#" class="forgot-password">Forgot Password?</a>
+            </div>
+            <button type="submit" class="btn">Login</button>
+            <div class="signup-link">
+              Don't have an account? <a href="{% url 'customersignup' %}">Sign up</a>
+            </div>
+          </form>
+        </div>
+        
+        <div class="eco-icons">
+          <i class="fa-solid fa-seedling eco-icon" style="top: 20%; left: 10%; font-size: 20px;"></i>
+          <i class="fa-solid fa-tree eco-icon" style="top: 70%; left: 15%; font-size: 24px;"></i>
+          <i class="fa-solid fa-recycle eco-icon" style="top: 40%; right: 10%; font-size: 18px;"></i>
+          <i class="fa-solid fa-leaf eco-icon" style="top: 80%; right: 20%; font-size: 16px;"></i>
+          <i class="fa-solid fa-globe eco-icon" style="top: 30%; right: 25%; font-size: 22px;"></i>
+        </div>
+      </div>
+    </div>
+  </div>
+</body>
+</html>

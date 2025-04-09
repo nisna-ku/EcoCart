@@ -1,0 +1,76 @@
+{% extends 'ecom/admin_base.html' %}
+{% load static %}
+{% block content %}
+
+
+<head>
+  <link href="//netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
+  <script src="//netdna.bootstrapcdn.com/bootstrap/3.0.0/js/bootstrap.min.js"></script>
+  <script src="//code.jquery.com/jquery-1.11.1.min.js"></script>
+
+  <style media="screen">
+    a:link {
+      text-decoration: none;
+    }
+
+    h6 {
+      text-align: center;
+    }
+
+    .row {
+      margin: 100px;
+    }
+  </style>
+</head>
+<!--
+written By : sumit kumar
+facebook : fb.com/sumit.luv
+-->
+<div class="container">
+  <div class="panel panel-danger">
+    <div class="panel-heading">
+      <h6 class="panel-title">Total Orders</h6>
+    </div>
+    <table class="table table-hover table-bordered" id="dev-table">
+      <thead>
+        <tr>
+          <th>Customer</th>
+          <th>Contact</th>
+          <th>Shipping Address</th>
+          <th>Product</th>
+          <th>Image</th>
+          <th>Status</th>
+          
+        </tr>
+      </thead>
+      <!-- p for product, c for customer-->
+      {% for data in order_data %}
+<tr>
+  <td>{{ data.customer.get_name }}</td>
+  <td>{{ data.customer.mobile }}</td>
+  <td>{{ data.order.address }}</td>
+
+  {% for product in data.products %}
+  <td>{{ product.name }}</td>
+  <td><img src="{{ product.product_image.url }}" alt="Product Image" height="40px" width="40px" /></td>
+  {% endfor %}
+
+  {% if data.order.status == 'Pending' %}
+  <td><span class="label label-info">{{ data.order.status }}</span></td>
+  {% elif data.order.status == 'Delivered' %}
+  <td><span class="label label-success">{{ data.order.status }}</span></td>
+  {% elif data.order.status == 'Out for Delivery' %}
+  <td><span class="label label-warning">{{ data.order.status }}</span></td>
+  {% else %}
+  <td><span class="label label-primary">{{ data.order.status }}</span></td>
+  {% endif %}
+</tr>
+{% endfor %}
+
+    </table>
+  </div>
+</div>
+<!--
+developed By : sumit kumar
+-->
+{% endblock content %}

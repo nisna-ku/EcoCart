@@ -1,0 +1,104 @@
+{% extends 'ecom/business_base.html' %}
+{% load static %}
+
+{% block content %}
+<div class="container mt-5">
+    <h2 class="text-center">Orders for Your Products</h2>
+    <table class="table table-bordered">
+        <thead class="thead-dark">
+            <tr>
+                <th>Order ID</th>
+                <th>Customer</th>
+                <th>Contact</th>
+                <th>Shipping Address</th>
+                <th>Products</th>
+                <th>Total Amount</th>
+                <th>Status</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for order in orders %}
+            <tr id="order-{{ order.id }}">
+                <td>{{ order.id }}</td>
+                <td>{{ order.customer.get_name }}</td>
+                <td>{{ order.customer.mobile }}</td>
+                <td>{{ order.address }}</td>
+                <td>
+                    <ul>
+                        {% for item in order.orderitem_set.all %}
+                        <li>
+                            {{ item.product.name }} - {{ item.quantity }}x  
+                            {% if item.product.product_image %}
+                                <img src="{{ item.product.product_image.url }}" alt="Product Image" height="40px" width="40px">
+                            {% else %}
+                                <span>No Image</span>
+                            {% endif %}
+                        </li>
+                        {% endfor %}
+                    </ul>
+                </td>
+                <td>₹{{ order.total_amount }}</td>
+                
+                
+                <td>
+                    <form class="status-form" data-order-id="{{ order.id }}">
+                        <select class="form-control status-select" name="new_status">
+                            <option value="Pending" {% if order.status == 'Pending' %}selected{% endif %}>Pending</option>
+                            <option value="Confirmed" {% if order.status == 'Confirmed' %}selected{% endif %}>Confirmed</option>
+                            <option value="Shipped" {% if order.status == 'Shipped' %}selected{% endif %}>Shipped</option>
+                            <option value="Delivered" {% if order.status == 'Delivered' %}selected{% endif %}>Delivered</option>
+                        </select>
+                        <button type="submit" class="btn btn-primary btn-sm mt-1">Update</button>
+                    </form>
+                </td>
+            </tr>
+            {% empty %}
+            <tr>
+                <td colspan="9" class="text-center">No orders found.</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+
+<!-- AJAX Script to Handle Status Update -->
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>$(document).ready(function() {
+    $(".status-form").submit(function(event) {
+        event.preventDefault(); // Prevent default form submission
+
+        var form = $(this);
+        var orderId = form.data("order-id");
+        var newStatus = form.find(".status-select").val();
+        var submitButton = form.find("button");
+
+        // Disable button to prevent multiple clicks
+        submitButton.prop("disabled", true).text("Updating...");
+
+        $.ajax({
+            url: "{% url 'update_order_status' %}",
+            type: "POST",
+            data: {
+                order_id: orderId,
+                new_status: newStatus,
+                csrfmiddlewaretoken: "{{ csrf_token }}" // Ensure CSRF token is sent
+            },
+            success: function(response) {
+                if (response.success) {
+                    alert(response.message); // Show success message
+                } else {
+                    alert("Error: " + response.error);
+                }
+            },
+            error: function() {
+                alert("Something went wrong. Please try again.");
+            },
+            complete: function() {
+                submitButton.prop("disabled", false).text("Update"); // Re-enable button
+            }
+        });
+    });
+});
+
+</script>
+{% endblock content %}

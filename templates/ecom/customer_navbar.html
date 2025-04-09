@@ -1,0 +1,253 @@
+<!-- <!DOCTYPE html>
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="utf-8">
+    <title>Eco-Friendly E-Commerce</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.0/css/bootstrap.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.0/js/bootstrap.min.js"></script>
+
+    <style>
+      body {
+        background-color: #f4f4f4;
+        font-family: 'Arial', sans-serif;
+      }
+
+      #navbar {
+        background-color: #1f2937; /* Dark charcoal for eco theme */
+        color: #ffffff;
+        border-bottom: 3px solid #10b981; /* Green accent for sustainability */
+      }
+
+      .row1 {
+        padding-top: 10px;
+        background-color: #374151; /* Slightly lighter shade for top row */
+      }
+
+      .upper-links {
+        margin-right: 15px;
+      }
+
+      .links {
+        color: #d1d5db; /* Soft grey text */
+        transition: all 0.3s ease;
+      }
+
+      .links:hover {
+        color: #10b981; /* Green hover effect */
+        text-decoration: none;
+      }
+
+      .navbar-search {
+        margin-top: 10px;
+      }
+
+      .navbar-input {
+        background-color: #4b5563; /* Dark input background */
+        color: #ffffff;
+        border: 1px solid #6b7280;
+      }
+
+      .navbar-button {
+        background-color: #10b981; /* Green submit button */
+        border-color: #10b981;
+        color: #ffffff;
+      }
+
+      .cart-button {
+        background-color: #374151;
+        color: #ffffff;
+        border: 1px solid #4b5563;
+        transition: all 0.3s ease;
+      }
+
+      .cart-button:hover {
+        background-color: #4b5563;
+        color: #10b981;
+      }
+
+      .item-number {
+        background-color: #10b981;
+        color: #ffffff;
+      }
+
+      /* Carbon Footprint Indicator */
+      .carbon-badge {
+        background-color: #10b981;
+        color: #ffffff;
+        padding: 5px 10px;
+        border-radius: 15px;
+        font-size: 10px;
+        margin-left: 10px;
+      }
+
+      @media screen and (max-width: 767px) {
+        .largenav {
+          display: none;
+        }
+        .smallnav {
+          display: block;
+        }
+      }
+
+      @media screen and (min-width: 768px) {
+        .largenav {
+          display: block;
+        }
+        .smallnav {
+          display: none;
+        }
+      }
+    </style>
+  </head>
+
+  <body>
+    <div id="navbar">
+        <div class="container">
+            <div class="row row1">
+                <ul class="largenav pull-right">
+                    <li class="upper-links">
+                        <a class="links" href="{% url 'order-list' %}">
+                            <i class="fa fa-truck"></i> Track Orders
+                        </a>
+                    </li>
+                    <li class="upper-links">
+                        <a class="links" href="/my-profile">
+                            <i class="fa fa-user"></i> Profile
+                        </a>
+                    </li>
+                    <li class="upper-links">
+                        <a class="links" href="/logout">
+                            <i class="fa fa-sign-out"></i> Logout
+                        </a>
+                    </li>
+                    <li class="upper-links">
+                        <span class="carbon-badge">
+                            <i class="fa fa-leaf"></i> 42 kg CO2 Saved
+                        </span>
+                    </li>
+                </ul>
+            </div>
+            <div class="row row2">
+                <div class="col-sm-3">
+                    <h2 style="margin:0px;">
+                        <a style="text-decoration:none; color:white;" href="/">
+                            <i class="fa fa-leaf" style="color: #10b981; margin-right: 10px;"></i>
+                            EcoCart
+                        </a>
+                    </h2>
+                </div>
+
+                <div class="navbar-search smallsearch col-sm-7 col-xs-11">
+                  <form action="/search" method="get">
+                    <div class="row">
+                      <input class="navbar-input col-xs-11" type="search" 
+                             placeholder="Search for Sustainable Products" 
+                             name="query" id="query">
+                      <button class="navbar-button col-xs-1" type="submit">
+                        <i class="fa fa-search"></i>
+                      </button>
+                    </div>
+                  </form>
+                </div>
+
+                <div class="cart1 largenav col-sm-2">
+                  <a class="cart-button" href="/cart">
+                    <i class="fa fa-shopping-cart"></i> Cart 
+                    <span class="item-number"></span>
+                  </a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+    $(document).ready(function(){
+      function openNav() {
+        document.getElementById("mySidenav").style.width = "70%";
+        document.body.style.backgroundColor = "rgba(0,0,0,0.4)";
+      }
+
+      function closeNav() {
+        document.getElementById("mySidenav").style.width = "0";
+        document.body.style.backgroundColor = "rgba(0,0,0,0)";
+      }
+    });
+    </script>
+  </body>
+</html> -->
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Navbar</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <style>
+        body {
+            background-color: #f8f9fa;
+        }
+        .navbar {
+            background: linear-gradient(45deg, #ff6b6b, #ffcc5c, #4ecdc4);
+        }
+        .navbar-brand, .nav-link {
+            color: #ffffff !important;
+            font-weight: bold;
+        }
+        .nav-link:hover {
+            color: #343a40 !important;
+        }
+        .btn-cart {
+            background-color: #ffcc5c;
+            color: #343a40;
+            border: none;
+            font-weight: bold;
+            transition: all 0.3s;
+        }
+        .btn-cart:hover {
+            background-color: #ff6b6b;
+            color: #ffffff;
+        }
+        .dropdown-menu {
+            background-color: #4ecdc4;
+        }
+        .dropdown-item {
+            color: #ffffff;
+        }
+        .dropdown-item:hover {
+            background-color: #ff6b6b;
+            color: #ffffff;
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-dark">
+        <div class="container">
+            <a class="navbar-brand" href="/">Simple Ecommerce</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item"><a class="nav-link" href="ecom/aboutus">About Us</a></li>
+                    <li class="nav-item"><a class="nav-link" href="ecom/adminclick">Admin</a></li>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">Login & Sign Up</a>
+                        <ul class="dropdown-menu">
+                            <li><a class="dropdown-item" href="/customerlogin">Login</a></li>
+                            <li><a class="dropdown-item" href="/customersignup">Sign Up</a></li>
+                        </ul>
+                    </li>
+                    <li class="nav-item">
+                        <a class="btn btn-cart" href="/cart">Cart <span class="badge bg-dark">{{ product_count_in_cart }}</span></a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+</body>
+</html>

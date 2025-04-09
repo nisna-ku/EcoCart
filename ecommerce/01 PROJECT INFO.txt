@@ -1,0 +1,178 @@
+
+
+**Instructions**
+- Install the Requirements: pip install -r requirements.txt
+- Then, make database migrations: python manage.py makemigrations
+- python manage.py migrate
+- And finally, run the application: python manage.py runserver
+
+admin :admin,password@123
+bussiness:neva,password@123
+customer:nisna,password@123
+
+
+======================================
+models:
+======================================
+
+
+
+
+class Business(models.Model):
+    VERIFICATION_STATUS = (
+        ('Verified', 'Verified'),
+        ('Pending', 'Pending'),
+        ('Rejected', 'Rejected'),
+    )
+    
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    business_name = models.CharField(max_length=100)
+    description = models.TextField()
+    business_logo = models.ImageField(upload_to='business_logos/', null=True, blank=True)
+    website = models.URLField(max_length=100, null=True, blank=True)
+    sustainability_score = models.DecimalField(max_digits=5, decimal_places=2, null=True, blank=True)
+    verification_status = models.CharField(max_length=20, choices=VERIFICATION_STATUS, default='Pending')
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    @property
+    def get_id(self):
+        return self.user.id
+
+    def __str__(self):
+        return self.business_name
+
+class Customer(models.Model):
+    user=models.OneToOneField(User,on_delete=models.CASCADE)
+    profile_pic= models.ImageField(upload_to='profile_pic/CustomerProfilePic/',null=True,blank=True)
+    address = models.CharField(max_length=40)
+    mobile = models.CharField(max_length=20,null=False)
+    @property
+    def get_name(self):
+        return self.user.first_name+" "+self.user.last_name
+    @property
+    def get_id(self):
+        return self.user.id
+    def __str__(self):
+        return self.user.first_name
+        
+
+
+class ProductCategory(models.Model):
+
+    CATEGORY_CHOICES = [
+        ('electronics', 'Electronics'),
+        ('clothing', 'Clothing'),
+        ('furniture', 'Furniture'),
+        ('beauty', 'Beauty & Personal Care'),
+        ('groceries', 'Groceries'),
+        ('sports', 'Sports & Outdoors'),
+    ]
+    
+    category = models.CharField(max_length=50, choices=CATEGORY_CHOICES, unique=True)
+
+    description = models.TextField(null=True)
+
+    def __str__(self):
+        return self.category
+ 
+  
+
+
+
+class Product(models.Model):
+    seller = models.ForeignKey(User, on_delete=models.CASCADE)  # Add this field
+    name=models.CharField(max_length=40)
+    product_image= models.ImageField(upload_to='product_image/',null=True,blank=True)
+    price = models.PositiveIntegerField()
+    description=models.CharField(max_length=40)
+    category = models.ForeignKey(ProductCategory, on_delete=models.CASCADE, related_name='products')
+    stock_quantity = models.PositiveIntegerField(default=0)
+    sustainability_score = models.DecimalField(max_digits=5, decimal_places=2, null=True, blank=True)
+    carbon_footprint = models.DecimalField(max_digits=10, decimal_places=2, default=0)  
+    materials_footprint = models.DecimalField(max_digits=10, decimal_places=2,null=True)
+    production_footprint = models.DecimalField(max_digits=10, decimal_places=2,null=True)
+    packaging_footprint = models.DecimalField(max_digits=10, decimal_places=2,null=True)
+    transportation_footprint = models.DecimalField(max_digits=10, decimal_places=2,null=True)
+    disposal_footprint = models.DecimalField(max_digits=10, decimal_places=2,null=True)
+    materials_source = models.TextField(null=True)
+    production_method = models.TextField(null=True)
+    disposal_instructions = models.TextField(null=True)
+    certification_details = models.TextField(null=True, blank=True)
+    last_updated = models.DateTimeField(auto_now=True,null=True)
+
+ 
+
+
+
+    def __str__(self):
+        return self.name
+    
+from django.db import models
+from ecom.models import Product  # Assuming Product model exists
+from django.contrib.sessions.models import Session
+
+class Cart(models.Model):
+    session_key = models.CharField(max_length=40, null=True, blank=True)  # Unique for each session
+    product = models.ForeignKey(Product, on_delete=models.CASCADE)
+    quantity = models.PositiveIntegerField(default=1)
+
+    def total_price(self):
+        return self.product.price * self.quantity
+
+    def __str__(self):
+        return f"{self.quantity} x {self.product.name}"
+
+
+
+
+class Orders(models.Model):
+    STATUS =(
+        ('Pending','Pending'),
+        ('Order Confirmed','Order Confirmed'),
+        ('Out for Delivery','Out for Delivery'),
+        ('Delivered','Delivered'),
+    )
+    SHIPPING_METHODS = (
+        ('standard', 'Standard Shipping'),
+        ('express', 'Express Shipping'),
+        ('eco', 'Eco-Friendly Shipping'),
+    )
+    customer=models.ForeignKey('Customer', on_delete=models.CASCADE,null=True)
+    email = models.CharField(max_length=50,null=True)
+    address = models.CharField(max_length=500,null=True)
+    mobile = models.CharField(max_length=20,null=True)
+    order_date= models.DateField(auto_now_add=True,null=True)
+    total_amount=models.DecimalField(max_digits=10,decimal_places=2,null=True)
+    total_carbon_footprint = models.DecimalField(max_digits=10, decimal_places=2)
+    shipping_method = models.CharField(max_length=50, choices=SHIPPING_METHODS)
+    shipping_carbon_offset = models.DecimalField(max_digits=10, decimal_places=2, null=True, blank=True)
+    status=models.CharField(max_length=50,null=True,choices=STATUS,default='Pending')
+    is_paid = models.CharField(max_length=20,default=False,null=True,blank=True)
+    razorpay_order_id = models.CharField(max_length=100, null=True, blank=True)
+    def get_items(self):
+        return self.orderitem_set.all()
+
+
+class Feedback(models.Model):
+    name=models.CharField(max_length=40)
+    feedback=models.CharField(max_length=500)
+    product=models.ForeignKey(Product,on_delete=models.CASCADE,null=True,blank=True)
+    date= models.DateField(auto_now_add=True,null=True)
+    def __str__(self):
+        return self.name
+
+
+
+
+class OrderItem(models.Model):
+    order = models.ForeignKey(Orders, on_delete=models.CASCADE)
+    product = models.ForeignKey('Product', on_delete=models.CASCADE)
+    quantity = models.PositiveIntegerField(default=1)
+    carbon_footprint = models.DecimalField(max_digits=10, decimal_places=2)
+    
+
+
+
+
+
+
