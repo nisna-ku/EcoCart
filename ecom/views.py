@@ -537,22 +537,26 @@ def view_business_view(request):
 #------------------------ PUBLIC CUSTOMER RELATED VIEWS START ---------------------
 #---------------------------------------------------------------------------------
 def search_view(request):
-    # whatever user write in search box we get in query
-    query = request.GET['query']
-    products=models.Product.objects.all().filter(name__icontains=query)
+    query = request.GET.get('query', '')  # Use get to avoid KeyError
+    products = models.Product.objects.filter(name__icontains=query) if query else []
+
     if 'product_ids' in request.COOKIES:
         product_ids = request.COOKIES['product_ids']
-        counter=product_ids.split('|')
-        product_count_in_cart=len(set(counter))
+        counter = product_ids.split('|')
+        product_count_in_cart = len(set(counter))
     else:
-        product_count_in_cart=0
+        product_count_in_cart = 0
 
-    # word variable will be shown in html when user click on search button
-    word="Searched Result :"
+    word = f"Searched Result for: '{query}'" if query else "No search term entered."
 
-    if request.user.is_authenticated:
-        return render(request,'ecom/customer_home.html',{'products':products,'word':word,'product_count_in_cart':product_count_in_cart})
-    return render(request,'ecom/index.html',{'products':products,'word':word,'product_count_in_cart':product_count_in_cart})
+    context = {
+        'products': products,
+        'word': word,
+        'product_count_in_cart': product_count_in_cart
+    }
+
+    return render(request, 'ecom/product_list.html', context)
+
 
 
 # any one can add product to cart, no need of signin
@@ -710,7 +714,6 @@ def product_detail(request, product_id):
 
 
 
-
 from decimal import Decimal
 from django.shortcuts import render, redirect
 from django.conf import settings 
@@ -729,13 +732,30 @@ def customer_address_view(request):
     product_count_in_cart = cart_items.count()
 
     addressForm = forms.AddressForm()
+    stock_errors = []
 
     if request.method == 'POST':
         addressForm = forms.AddressForm(request.POST)
         shipping_method = request.POST.get('shipping_method', 'standard')
 
+        # ✅ Check stock before validating form
+        for item in cart_items:
+            if item.quantity > item.product.stock_quantity:
+                stock_errors.append(
+                    f"Only {item.product.stock_quantity} left in stock for '{item.product.name}'."
+                )
+
+        if stock_errors:
+            # ✅ Return with error if stock issues found
+            return render(request, 'ecom/customer_address.html', {
+                'addressForm': addressForm,
+                'product_in_cart': product_in_cart,
+                'product_count_in_cart': product_count_in_cart,
+                'stock_errors': stock_errors
+            })
+
         if addressForm.is_valid():
-            # Store address details in session
+            # ✅ Store address details in session
             request.session['order_details'] = {
                 'email': addressForm.cleaned_data['Email'],
                 'mobile': addressForm.cleaned_data['Mobile'],
@@ -743,7 +763,7 @@ def customer_address_view(request):
                 'shipping_method': shipping_method
             }
 
-            # Redirect to Razorpay payment
+            # ✅ Redirect to Razorpay payment
             return redirect('initiate-payment')
 
     return render(request, 'ecom/customer_address.html', {
@@ -888,6 +908,10 @@ def payment_success_view(request):
                 quantity=item.quantity,
                 carbon_footprint=item.product.carbon_footprint * item.quantity
             )
+
+            # update stock quantity
+            item.product.stock_quantity -= item.quantity
+            item.product.save()
 
         # ✅ Clear cart and session
         cart_items.delete()
